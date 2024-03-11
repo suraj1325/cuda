@@ -1,99 +1,66 @@
 #!/bin/bash
 
-# Log file
-LOG_FILE="install_cuda.log"
-
-# Function to log status
-log_status() {
-    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" >> "$LOG_FILE"
-}
-
 # Download CUDA keyring
-log_status "Downloading CUDA keyring..."
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-download_status=$?
-if [ $download_status -eq 0 ]; then
-    log_status "CUDA keyring downloaded successfully."
+if [ $? -eq 0 ]; then
+    echo "CUDA keyring downloaded successfully."
 else
-    log_status "Failed to download CUDA keyring. Exit status: $download_status"
-    exit $download_status
+    echo "Failed to download CUDA keyring."
+    exit 1
 fi
 
 # Install CUDA keyring
-log_status "Installing CUDA keyring..."
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
-install_status=$?
-if [ $install_status -eq 0 ]; then
-    log_status "CUDA keyring installed successfully."
+if [ $? -eq 0 ]; then
+    echo "CUDA keyring installed successfully."
 else
-    log_status "Failed to install CUDA keyring. Exit status: $install_status"
-    exit $install_status
+    echo "Failed to install CUDA keyring."
+    exit 1
 fi
 
 # Update apt repository
-log_status "Updating apt repository..."
 sudo apt-get update
-update_status=$?
-if [ $update_status -eq 0 ]; then
-    log_status "Apt repository updated successfully."
+if [ $? -eq 0 ]; then
+    echo "Apt repository updated successfully."
 else
-    log_status "Failed to update apt repository. Exit status: $update_status"
-    exit $update_status
+    echo "Failed to update apt repository."
+    exit 1
 fi
 
 # Install CUDA Toolkit
-log_status "Installing CUDA Toolkit..."
 sudo apt-get -y install cuda-toolkit-12-4
-toolkit_status=$?
-if [ $toolkit_status -eq 0 ]; then
-    log_status "CUDA Toolkit installed successfully."
+if [ $? -eq 0 ]; then
+    echo "CUDA Toolkit installed successfully."
 else
-    log_status "Failed to install CUDA Toolkit. Exit status: $toolkit_status"
-    exit $toolkit_status
+    echo "Failed to install CUDA Toolkit."
+    exit 1
 fi
 
 # Install CUDA drivers
-log_status "Installing CUDA drivers..."
 sudo apt-get install -y cuda-drivers
-drivers_status=$?
-if [ $drivers_status -eq 0 ]; then
-    log_status "CUDA drivers installed successfully."
+if [ $? -eq 0 ]; then
+    echo "CUDA drivers installed successfully."
 else
-    log_status "Failed to install CUDA drivers. Exit status: $drivers_status"
-    exit $drivers_status
+    echo "Failed to install CUDA drivers."
+    exit 1
 fi
 
 # Install NVIDIA driver 550 open
-log_status "Installing NVIDIA driver 550 open..."
 sudo apt-get install -y nvidia-driver-550-open
-nvidia_status=$?
-if [ $nvidia_status -eq 0 ]; then
-    log_status "NVIDIA driver 550 open installed successfully."
+if [ $? -eq 0 ]; then
+    echo "NVIDIA driver 550 open installed successfully."
 else
-    log_status "Failed to install NVIDIA driver 550 open. Exit status: $nvidia_status"
-    exit $nvidia_status
+    echo "Failed to install NVIDIA driver 550 open."
+    exit 1
 fi
 
 # Install CUDA drivers 550
-log_status "Installing CUDA drivers 550..."
 sudo apt-get install -y cuda-drivers-550
-cuda550_status=$?
-if [ $cuda550_status -eq 0 ]; then
-    log_status "CUDA drivers 550 installed successfully."
+if [ $? -eq 0 ]; then
+    echo "CUDA drivers 550 installed successfully."
 else
-    log_status "Failed to install CUDA drivers 550. Exit status: $cuda550_status"
-    exit $cuda550_status
+    echo "Failed to install CUDA drivers 550."
+    exit 1
 fi
 
-# Make the script executable
-log_status "Making the script executable..."
-chmod +x install_cuda.sh
-chmod_status=$?
-if [ $chmod_status -eq 0 ]; then
-    log_status "Script made executable successfully."
-else
-    log_status "Failed to make the script executable. Exit status: $chmod_status"
-    exit $chmod_status
-fi
-
-log_status "All commands executed successfully."
+echo "All commands executed successfully."
